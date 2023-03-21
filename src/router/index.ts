@@ -1,23 +1,35 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import AuthorizationPage from '@/pages/AuthorizationPage/components/AuthorizationPage.vue';
+import NotFoundPage
+    from '@/pages/NotFoundPage/components/NotFoundPage.vue';
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
-  routes: [
-    {
-      path: '/',
-      name: 'home',
-      component: HomeView
-    },
-    {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue')
+    history: createWebHistory(import.meta.env.BASE_URL),
+    routes: [
+        {
+            path: '/',
+            redirect: '/authorization'
+        },
+        {
+            path: '/authorization',
+            name: 'authorization',
+            component: AuthorizationPage
+        },
+        {
+            path: '/:pathMatch(.*)*',
+            component: NotFoundPage
+        }
+    ]
+})
+
+router.beforeEach((to) => {
+    const jwtToken = localStorage.getItem('jwtToken')
+    if (to.meta.requireAuth && !jwtToken) {
+        return {
+            path: '/authorization',
+            query: { redirect: to.fullPath }
+        }
     }
-  ]
 })
 
 export default router

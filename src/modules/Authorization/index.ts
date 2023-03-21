@@ -1,0 +1,1 @@
+export { default as Authorization } from './components/AuthorizationMain.vue'
