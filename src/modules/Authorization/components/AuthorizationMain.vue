@@ -40,15 +40,15 @@ import AuthorizationForm from '@/modules/Authorization/components/AuthorizationF
 import type {FormData} from '@/modules/Authorization/helpers/types';
 import authAPI from '@/modules/Authorization/api';
 
-const tab = ref<number>(0)
+const tab = ref<string>('')
 const isRequestFetching = ref<boolean>(false)
 
 const initLogin = async ({email, password}: FormData) => {
   try {
     isRequestFetching.value = true
     const response = await authAPI.initUserLogin({ email, password })
-
-    // TODO: Тут логика сохранения JWT и переброса в кабинет пользователя, когда он будет готов
+    // TODO: Тут логика сохранения JWT, парсинга JWT чтобы сохранить в стор имя и роли
+    // TODO: и переброса в кабинет пользователя, когда он будет готов
   } catch (error) {
 
     // TODO: Тут сделать обработку ошибок с бэка и вывод их
@@ -58,7 +58,16 @@ const initLogin = async ({email, password}: FormData) => {
 }
 
 const initRegistration = async ({email, password}: FormData) => {
-  
+  try {
+    isRequestFetching.value = true
+    const response = await authAPI.initUserRegistration({ email, password })
+    // TODO: Тут логика вывода уведомления о успешной регистрации
+    tab.value = 'login'
+  } catch (error) {
+    // TODO: Тут сделать обработку ошибок с бэка и вывод их
+  } finally {
+    isRequestFetching.value = false
+  }
 }
 
 const initAuthorization = async (data: FormData) => {

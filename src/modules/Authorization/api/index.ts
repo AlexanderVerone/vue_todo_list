@@ -6,7 +6,12 @@ const authApi = axios.create({
 })
 
 export default {
-    initUserLogin(userData: UserData) {
-        return authApi.post('/auth', userData)
+    async initUserLogin(userData: UserData) {
+        return []
+        // return await authApi.post('/login', userData)
+    },
+
+    async initUserRegistration(userData: UserData) {
+        // return await authApi.post('/register', userData)
     }
 }
