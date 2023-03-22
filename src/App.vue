@@ -3,6 +3,13 @@ import { RouterLink, RouterView } from 'vue-router'
 </script>
 
 <template>
+  <header class="text-center">
+    <img
+      src="@/assets/logos/todo_logo_white.svg"
+      alt="main logo"
+      width="400"
+    >
+  </header>
   <RouterView />
 </template>
 
