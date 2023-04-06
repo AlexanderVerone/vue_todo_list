@@ -14,6 +14,7 @@
       maxlength="40"
       append-inner-icon="mdi-account"
       class="mb-2"
+      @input="resetValidation"
     />
     <v-text-field
       v-model.trim="userPassword"
@@ -23,6 +24,7 @@
       maxlength="40"
       class="mb-2"
       append-inner-icon="mdi-key"
+      @input="resetValidation"
     />
     <v-btn
       block
@@ -38,18 +40,18 @@
 
 <script lang="ts" setup>
 import {VForm} from 'vuetify/components';
-import {computed, ref} from 'vue';
+import {computed, onUpdated, ref} from 'vue';
 import { rules } from '@/modules/Authorization/helpers/authorizationRules';
 
 const props = defineProps({
-    formType: {
-        type: String,
-        required: true
-    },
-    isRequestFetching: {
-        type: Boolean,
-        default: false
-    }
+  formType: {
+    type: String,
+    required: true
+  },
+  isRequestFetching: {
+    type: Boolean,
+    default: false
+  }
 })
 const emit = defineEmits(['init-authorization'])
 
@@ -59,54 +61,62 @@ const userEmail = ref<string | null>(null)
 const userPassword = ref<string | null>(null)
 
 const submitButtonName = computed((): string => {
-    if (props.formType === 'login') {
-        return 'Войти'
-    }
+  if (props.formType === 'login') {
+    return 'Войти'
+  }
   
-    if (props.formType === 'register') {
-        return 'Зарегистрироваться'
-    }
+  if (props.formType === 'register') {
+    return 'Зарегистрироваться'
+  }
   
-    return 'Тип формы не указан'
+  return 'Тип формы не указан'
 })
 
 const validateUserData = async (): Promise<boolean> => {
-    if (!form.value) {
-        return false
-    }
+  if (!form.value) {
+    return false
+  }
 
-    const result = await form.value.validate()
+  const result = await form.value.validate()
 
-    return result.valid
+  return result.valid
 }
 
 const emitFormSubmit = async () => {
-    if (!form.value) {
-        return
-    }
+  if (!form.value) {
+    return
+  }
 
-    const isFormValid = await validateUserData()
+  const isFormValid = await validateUserData()
 
-    if (!isFormValid) {
-        return
-    }
-  
-    emit('init-authorization', { 
-        email: userEmail.value, 
-        password: userPassword.value, 
-        formType: props.formType 
-    })
+  if (!isFormValid) {
+    return
+  }
+
+  emit('init-authorization', { 
+    email: userEmail.value, 
+    password: userPassword.value, 
+    formType: props.formType 
+  })
 }
 
 const resetValidation = () => {
-    if (!form.value) {
-        return
-    }
+  if (!form.value) {
+    return
+  }
 
-    form.value.resetValidation()
+  form.value.resetValidation()
 }
 
-const login = async () => {
+const resetForm = () => {
+  if (!form.value) {
+    return
+  }
 
+  form.value.reset()
 }
+
+defineExpose({
+  resetForm
+})
 </script>

@@ -1,7 +1,5 @@
 <template>
-  <v-container>
-    <UserCabinetMain />
-  </v-container>
+  <UserCabinetMain />
 </template>
 
 <script>

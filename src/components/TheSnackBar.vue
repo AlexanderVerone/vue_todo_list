@@ -1,7 +1,10 @@
 <template>
   <v-snackbar
     v-model="isActive"
-    timeout="2000"
+    :timeout="timeout"
+    :color="messageType"
+    :location="location"
+    width="auto"
   >
     {{ message }}
   </v-snackbar>
@@ -11,11 +14,26 @@
 import {ref} from 'vue';
 
 defineProps({
-  message: {
+  timeout: {
+    type: Number,
+    default: 3000
+  },
+  location: {
     type: String,
-    required: true,
+    default: 'top right'
   }
 })
 
 const isActive = ref<boolean>(false)
+const message = ref<string>('')
+const messageType = ref<string>('')
+const openSnackBar = (toastMessage: string, type: string) => {
+  message.value = toastMessage
+  messageType.value = type
+  isActive.value = true
+}
+
+defineExpose({
+  openSnackBar
+})
 </script>
