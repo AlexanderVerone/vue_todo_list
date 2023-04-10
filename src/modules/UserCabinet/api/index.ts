@@ -20,5 +20,9 @@ export default {
 
   async deleteTodo (todoId: number) {
     return await userCabinetApi.delete(`/todos/${todoId}`)
+  },
+
+  async toggleTaskCompletion (todoId: number) {
+    return await userCabinetApi.patch(`/todos/${todoId}`)
   }
 }

@@ -44,10 +44,24 @@ export const useUserCabinetStore = defineStore('userCabinet', () => {
       return Promise.reject(error)
     }
   }
+
+  const toggleTodoCompletion = async (todoId: number) => {
+    if (!todoId) {
+      return
+    }
+
+    try {
+      await UserCabinetApi.toggleTaskCompletion(todoId)
+    } catch (error: any) {
+      return Promise.reject(error)
+    }
+  }
   
   return {
     todos,
     loadTodosByUserId,
-    deleteTodo
+    deleteTodo,
+    addTodo,
+    toggleTodoCompletion,
   }
 })

@@ -9,7 +9,7 @@ export interface Todo {
 }
 
 export interface NewTodo {
-    description: string
-    userId: number
-    deadline: number
+    description: string | null
+    userId?: number
+    deadline: number | null
 }

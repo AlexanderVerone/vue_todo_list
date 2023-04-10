@@ -18,10 +18,18 @@
         :key="index"
       >
         <td>
-          <v-checkbox v-model="todo.isDone" />
+          <v-checkbox
+            v-model="todo.isDone"
+            hide-details
+            @click="toggleTaskIsDone(todo.id)"
+          />
         </td>
-        <td>{{ todo.description }}</td>
-        <td>{{ convertFromUnix(todo.deadline) }}</td>
+        <td :class="{'done': todo.isDone}">
+          {{ todo.description }}
+        </td>
+        <td :class="{'done': todo.isDone}">
+          {{ convertFromUnix(todo.deadline) }}
+        </td>
         <td>
           <v-tooltip
             text="Удалить задачу"
@@ -74,7 +82,7 @@
 import {computed, onMounted, ref} from 'vue';
 import {useAuthorizationStore} from '@/modules/Authorization/store/authorizationStore';
 import TheSnackBar from '@/components/TheSnackBar.vue';
-import type {Todo} from '@/modules/UserCabinet/interfaces/todos.interface';
+import type {NewTodo, Todo} from '@/modules/UserCabinet/interfaces/todos.interface';
 import { convertFromUnix, convertToUnix } from '@/modules/UserCabinet/helpers/utils';
 import {useUserCabinetStore} from '@/modules/UserCabinet/store/userCabinetStore';
 import UserCabinetNewTodoModal from '@/modules/UserCabinet/components/UserCabinetNewTodoModal.vue';
@@ -102,9 +110,15 @@ const openNewTodoModal = () => {
   addTodoModal.value.open()
 }
 
-const addTodo = async (newTodoData) => {
+const addTodo = async (newTodoData: NewTodo) => {
+  if (!userId.value) {
+    return
+  }
+
+  newTodoData.userId = userId.value
+
   try {
-    //TODO: добавляем новый туду и обновляем весь список
+    await cabinetStore.addTodo(newTodoData)
     await initTodos()
   } catch (error: any) {
     const errorMessage = error.response.data.message
@@ -127,7 +141,26 @@ const deleteTodo = async (todoId: number) => {
   }
 }
 
+const toggleTaskIsDone = async (todoId: number) => {
+  if (!todoId) {
+    return
+  }
+
+  try {
+    await cabinetStore.toggleTodoCompletion(todoId)
+  } catch (error: any) {
+    const errorMessage = error.response.data.message
+    toast.value.openSnackBar(errorMessage, 'error')
+  }
+}
+
 onMounted(() => {
   initTodos()
 })
 </script>
+
+<style scoped>
+.done {
+  background-image: linear-gradient(to bottom,  transparent calc(50% - 1px), white, transparent calc(50% + 1px));
+}
+</style>

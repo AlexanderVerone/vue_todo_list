@@ -1,7 +1,8 @@
 export const rules = {
   description: [
     (value: string) => {
-      if (value) {
+      const trimValue = value.trim()
+      if (trimValue.trim()) {
         return true
       }
 
