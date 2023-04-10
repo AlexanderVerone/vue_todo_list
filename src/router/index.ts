@@ -10,7 +10,7 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      redirect: '/authorization'
+      redirect: '/user/:id'
     },
     {
       path: '/authorization',

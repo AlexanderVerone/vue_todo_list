@@ -1,5 +1,7 @@
 <template>
-  <UserCabinetMain />
+  <v-container class="userCabinet">
+    <UserCabinetMain />
+  </v-container>
 </template>
 
 <script>
@@ -10,3 +12,13 @@ export default defineComponent({
   components: {UserCabinetMain}
 })
 </script>
+
+<style scoped>
+.userCabinet {
+  width: 100%;
+  height: 70vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+</style>

@@ -2,7 +2,9 @@
   <header>
     <TheHeader />
   </header>
-  <RouterView />
+  <section class="main">
+    <RouterView />
+  </section>
 </template>
 
 <script setup lang="ts">
