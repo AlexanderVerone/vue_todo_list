@@ -42,6 +42,12 @@ router.beforeEach((to) => {
     }
   }
 
+  if (to.path === '/authorization' && jwtToken && userId) {
+    return {
+      path: `/user/${userId}`
+    }
+  }
+
   if (
     to.meta.requireAuth && 
     to.params.id &&
