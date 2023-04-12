@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-row dense>
+    <v-row>
       <v-col cols="8">
         <UserCabinetTable
           :todos="todos"
@@ -11,7 +11,7 @@
       <v-col cols="4">
         <UserCabinetTaskCalendar
           :todos="todos"
-          class="mb-2"
+          class="mb-6"
         />
         <UserCabinetChat :user-id="userId" />
       </v-col>

@@ -12,42 +12,47 @@
       </tr>
     </thead>
     <tbody>
-      <tr
-        v-for="(todo, index) in todos"
-        :key="index"
+      <TransitionGroup
+        name="tr"
+        mode="out-in"
       >
-        <td>
-          <v-checkbox
-            v-model="todo.isDone"
-            hide-details
-            @click="toggleTaskIsDone(todo.id)"
-          />
-        </td>
-        <td :class="{'done': todo.isDone}">
-          {{ todo.description }}
-        </td>
-        <td :class="{'done': todo.isDone}">
-          {{ convertFromUnix(todo.deadline) }}
-        </td>
-        <td>
-          <v-tooltip
-            text="Удалить задачу"
-            location="bottom"
-          >
-            <template #activator="{props}">
-              <v-btn
-                v-bind="props"
-                density="compact"
-                size="large"
-                variant="text"
-                color="red"
-                icon="mdi-delete-outline"
-                @click="deleteTodo(todo.id)"
-              />
-            </template>
-          </v-tooltip>
-        </td>
-      </tr>
+        <tr
+          v-for="(todo, index) in todos"
+          :key="index"
+        >
+          <td>
+            <v-checkbox
+              v-model="todo.isDone"
+              hide-details
+              @click="toggleTaskIsDone(todo.id)"
+            />
+          </td>
+          <td :class="{'done': todo.isDone}">
+            {{ todo.description }}
+          </td>
+          <td :class="{'done': todo.isDone}">
+            {{ convertFromUnix(todo.deadline) }}
+          </td>
+          <td>
+            <v-tooltip
+              text="Удалить задачу"
+              location="bottom"
+            >
+              <template #activator="{props}">
+                <v-btn
+                  v-bind="props"
+                  density="compact"
+                  size="large"
+                  variant="text"
+                  color="red"
+                  icon="mdi-delete-outline"
+                  @click="deleteTodo(todo.id)"
+                />
+              </template>
+            </v-tooltip>
+          </td>
+        </tr>
+      </TransitionGroup>
     </tbody>
     <tfoot>
       <v-tooltip
@@ -154,5 +159,23 @@ const toggleTaskIsDone = async (todoId: number) => {
 <style scoped>
 .done {
   background-image: linear-gradient(to bottom,  transparent calc(50% - 1px), white, transparent calc(50% + 1px));
+}
+
+.tr-enter-active {
+  transition: all 0.3s ease-in;
+}
+
+.tr-leave-active {
+  transition: all 0.3s ease-out;
+}
+
+.tr-enter-from {
+  transform: translateY(-30px);
+  opacity: 0;
+}
+
+.tr-leave-to {
+  transform: translateY(30px);
+  opacity: 0;
 }
 </style>
