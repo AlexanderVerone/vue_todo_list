@@ -3,6 +3,7 @@
     <v-tabs
       v-model="tab"
       align-tabs="center"
+      grow
       :disabled="isRequestFetching"
     >
       <v-tab value="login">
@@ -13,7 +14,7 @@
       </v-tab>
     </v-tabs>
 
-    <v-card-text>
+    <v-card-text class="px-0">
       <v-window v-model="tab">
         <v-window-item value="login">
           <AuthorizationForm
