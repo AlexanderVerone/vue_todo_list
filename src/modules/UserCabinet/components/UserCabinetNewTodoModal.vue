@@ -1,9 +1,8 @@
 <template>
   <v-dialog
     v-model="isModalActive"
-    persistent
     width="500"
-    theme="dark"
+    @keyup.esc="close"
   >
     <v-card>
       <v-card-title class="text-center">
