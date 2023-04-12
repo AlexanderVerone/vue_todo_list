@@ -17,3 +17,12 @@ export const convertToUnix = (date: string): number => {
   return moment(date, 'DD.MM.YYYY')
     .unix()
 }
+
+export const convertFromUnixToDateTime = (unixDate: number): string => {
+  if (!unixDate) {
+    return '-'
+  }
+
+  return moment.unix(unixDate)
+    .format('HH:mm DD.MM.YYYY')
+}
