@@ -1,6 +1,5 @@
 <template>
   <v-table
-    theme="dark"
     fixed-header
     fixed-footer
   >
@@ -33,8 +32,7 @@
         <td>
           <v-tooltip
             text="Удалить задачу"
-            location="end"
-            theme="white"
+            location="bottom"
           >
             <template #activator="{props}">
               <v-btn
@@ -55,7 +53,6 @@
       <v-tooltip
         text="Добавить задачу"
         location="bottom"
-        theme="white"
       >
         <template #activator="{props}">
           <v-btn
@@ -71,7 +68,7 @@
       </v-tooltip>
     </tfoot>
   </v-table>
-  <TheSnackBar ref="toast" />
+  <TheSnackBar ref="tableToast" />
   <UserCabinetNewTodoModal
     ref="addTodoModal"
     @add-todo="addTodo"
@@ -79,50 +76,49 @@
 </template>
 
 <script lang="ts" setup>
-import {computed, onMounted, ref} from 'vue';
-import {useAuthorizationStore} from '@/modules/Authorization/store/authorizationStore';
+import {PropType, ref} from 'vue';
 import TheSnackBar from '@/components/TheSnackBar.vue';
 import type {NewTodo, Todo} from '@/modules/UserCabinet/interfaces/todos.interface';
-import { convertFromUnix, convertToUnix } from '@/modules/UserCabinet/helpers/utils';
+import { convertFromUnix } from '@/modules/UserCabinet/helpers/utils';
 import {useUserCabinetStore} from '@/modules/UserCabinet/store/userCabinetStore';
 import UserCabinetNewTodoModal from '@/modules/UserCabinet/components/UserCabinetNewTodoModal.vue';
 
-const cabinetStore = useUserCabinetStore()
-const authStore = useAuthorizationStore()
-
-const todos = ref<Todo[]>([])
-const toast = ref<InstanceType<typeof TheSnackBar> | null>(null)
-const addTodoModal = ref<InstanceType<typeof UserCabinetNewTodoModal>| null>(null)
-
-const userId = computed((): number | null => authStore.userId)
-
-const initTodos = async () => {
-  try {
-    await cabinetStore.loadTodosByUserId(userId.value)
-    todos.value = cabinetStore.todos
-  } catch (error: any) {
-    const errorMessage = error.response.data.message
-    toast.value.openSnackBar(errorMessage, 'error')
+const props = defineProps({
+  todos: {
+    type: Array as PropType<Todo[]>,
+    required: true
+  },
+  userId: {
+    type: Number,
+    required: true,
   }
-}
+})
+
+const emit = defineEmits(['update-todos'])
+
+const cabinetStore = useUserCabinetStore()
+
+const tableToast = ref<InstanceType<typeof TheSnackBar> | null>(null)
+const addTodoModal = ref<InstanceType<typeof UserCabinetNewTodoModal>| null>(null)
 
 const openNewTodoModal = () => {
   addTodoModal.value.open()
 }
 
 const addTodo = async (newTodoData: NewTodo) => {
-  if (!userId.value) {
+  if (!props.userId) {
     return
   }
 
-  newTodoData.userId = userId.value
+  newTodoData.userId = props.userId
 
   try {
     await cabinetStore.addTodo(newTodoData)
-    await initTodos()
+    emit('update-todos')
+    tableToast.value.openSnackBar('Задача добавлена', 'success')
   } catch (error: any) {
     const errorMessage = error.response.data.message
-    toast.value.openSnackBar(errorMessage, 'error')
+    tableToast.value.openSnackBar(errorMessage, 'error')
   }
 }
 
@@ -133,11 +129,11 @@ const deleteTodo = async (todoId: number) => {
 
   try {
     await cabinetStore.deleteTodo(todoId)
-    await initTodos()
-    toast.value.openSnackBar('Задача удалена', 'success')
+    emit('update-todos')
+    tableToast.value.openSnackBar('Задача удалена', 'success')
   } catch (error: any) {
     const errorMessage = error.response.data.message
-    toast.value.openSnackBar(errorMessage, 'error')
+    tableToast.value.openSnackBar(errorMessage, 'error')
   }
 }
 
@@ -150,13 +146,9 @@ const toggleTaskIsDone = async (todoId: number) => {
     await cabinetStore.toggleTodoCompletion(todoId)
   } catch (error: any) {
     const errorMessage = error.response.data.message
-    toast.value.openSnackBar(errorMessage, 'error')
+    tableToast.value.openSnackBar(errorMessage, 'error')
   }
 }
-
-onMounted(() => {
-  initTodos()
-})
 </script>
 
 <style scoped>
