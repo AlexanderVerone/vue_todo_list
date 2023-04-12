@@ -6,13 +6,16 @@ import 'vuetify/styles'
 import '@mdi/font/css/materialdesignicons.css'
 
 export default createVuetify({
-    components,
-    directives,
-    icons: {
-        defaultSet: 'mdi',
-        aliases,
-        sets: {
-            mdi,
-        }
-    },
+  components,
+  directives,
+  icons: {
+    defaultSet: 'mdi',
+    aliases,
+    sets: {
+      mdi,
+    }
+  },
+  theme: {
+    defaultTheme: 'dark'
+  }
 })
