@@ -1,0 +1,1 @@
+export { default as TheChat } from './components/TheChat.vue'

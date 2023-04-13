@@ -1,0 +1,1 @@
+export { default as UserCabinet } from './components/UserCabinetMain.vue'

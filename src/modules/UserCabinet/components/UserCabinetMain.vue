@@ -13,7 +13,7 @@
           :todos="todos"
           class="mb-6"
         />
-        <UserCabinetChat :user-id="userId" />
+        <TheChat :user-id="userId" />
       </v-col>
     </v-row>
     <TheSnackBar ref="cabinetToast" />
@@ -28,7 +28,7 @@ import {Todo} from '@/modules/UserCabinet/interfaces/todos.interface';
 import {useUserCabinetStore} from '@/modules/UserCabinet/store/userCabinetStore';
 import {useAuthorizationStore} from '@/modules/Authorization/store/authorizationStore';
 import TheSnackBar from '@/components/TheSnackBar.vue';
-import UserCabinetChat from '@/modules/UserCabinet/components/UserCabinetChat.vue';
+import { TheChat } from '@/modules/Chat';
 
 const cabinetStore = useUserCabinetStore()
 const authStore = useAuthorizationStore()

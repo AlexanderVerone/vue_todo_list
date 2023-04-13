@@ -1,14 +1,14 @@
 <template>
   <div class="mt-5">
-    <UserCabinetMain />
+    <UserCabinet />
   </div>
 </template>
 
 <script>
 import {defineComponent} from 'vue';
-import UserCabinetMain from '@/modules/UserCabinet/components/UserCabinetMain.vue';
+import { UserCabinet } from '@/modules/UserCabinet/';
 
 export default defineComponent({
-  components: {UserCabinetMain}
+  components: {UserCabinet}
 })
 </script>
