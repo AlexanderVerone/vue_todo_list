@@ -5,13 +5,22 @@
       alt="main logo"
       width="400"
     >
-    <v-btn
-      v-if="isUserAuthenticated"
-      color="primary"
-      @click="logout"
-    >
-      Выйти
-    </v-btn>
+    <Transition>
+      <div
+        v-if="isUserAuthenticated"
+        class="d-flex align-center"
+      >
+        <p class="mr-5">
+          {{ userName }}
+        </p>
+        <v-btn
+          color="primary"
+          @click="logout"
+        >
+          Выйти
+        </v-btn>
+      </div>
+    </Transition>
   </section>
 </template>
 
@@ -22,7 +31,23 @@ import {computed} from 'vue';
 const authorizationStore = useAuthorizationStore()
 const isUserAuthenticated = computed(() => authorizationStore.isAuthenticated)
 
+const userName = computed((): string => {
+  return authorizationStore.userEmail
+})
+
 const logout = () => {
   authorizationStore.logout()
 }
 </script>
+
+<style scoped>
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 1s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
+</style>
