@@ -13,7 +13,7 @@
         />
       </v-col>
       <v-col cols="4">
-        <TheChat :user-id="userId" />
+        <TheChat />
       </v-col>
     </v-row>
     <TheSnackBar ref="cabinetToast" />
@@ -39,6 +39,10 @@ const todos = ref<Todo[]>([])
 const userId = computed((): number | null => authStore.userId)
 
 const initTodos = async () => {
+  if (!userId.value) {
+    return
+  }
+
   try {
     await cabinetStore.loadTodosByUserId(userId.value)
     todos.value = cabinetStore.todos

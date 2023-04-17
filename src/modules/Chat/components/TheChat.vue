@@ -126,13 +126,6 @@ import {rules} from '@/modules/Chat/helpers/rules';
 import {useAuthorizationStore} from '@/modules/Authorization/store/authorizationStore';
 import moment from 'moment';
 
-const props = defineProps({
-  userId: {
-    type: Number,
-    required: true,
-  }
-})
-
 const chatStore = useChatStore()
 const authStore = useAuthorizationStore()
 
@@ -165,7 +158,7 @@ const unreadMessages = computed((): number => {
 })
 
 const isSameUserMessage = (message: Message) => {
-  return message.userId === props.userId
+  return message.userId === authStore.userId
 }
 
 const sendMessage = async () => {
