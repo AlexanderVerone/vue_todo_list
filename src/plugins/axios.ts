@@ -1,19 +1,21 @@
 import axios from 'axios';
-import type {App} from 'vue'
 
-interface AxiosOptions {
-    baseUrl?: string
-    token?: string
-}
+const axiosInstance = axios.create({
+  baseURL: 'http://localhost:4000',
+})
 
-export default {
-    install: (app: App, options: AxiosOptions) => {
-        app.config.globalProperties.$axios = axios.create({
-            baseURL: options.baseUrl,
-            headers: {
-                Authorization: options.token ? `Bearer ${options.token}` : '',
-            }
-        })
-        app.provide('axios', app.config.globalProperties.$axios)
-    }
+axiosInstance.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token')
+
+  if (token) {
+    config.headers['Authorization'] = `Bearer ${token}`
+  }
+
+  return config
+},
+(error) => {
+  return Promise.reject(error)
 }
+)
+
+export default axiosInstance

@@ -1,13 +1,9 @@
-import axios from 'axios';
+import axiosInstance from '@/plugins/axios';
 import type {Message} from '@/modules/Chat/interfaces/chat';
-
-const chatApi = axios.create({
-  baseURL: 'http://localhost:4000/',
-})
 
 export default {
   async getChatMessages (): Promise<Message[]> {
-    return await chatApi.get('/chatMessages')
+    return await axiosInstance.get('/chatMessages')
       .then(response => response.data)
   },
 }
