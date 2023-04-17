@@ -5,7 +5,7 @@
       :content="unreadMessages"
       color="red"
       max="99"
-      :model-value="unreadMessages"
+      :model-value="Boolean(unreadMessages)"
     >
       <v-btn @click="toggleChatView">
         Чатик
@@ -62,18 +62,20 @@
             <p class="messageUser">
               {{ message.userName }}:
             </p>
-            <span :ref="el => { divs[index] = el }">{{ message.text }}</span>
+            <span :ref="el => { messageTextSpanRefs[index] = el }">{{ message.text }}</span>
             <v-divider class="my-1" />
             <div class="d-flex justify-space-between">
               <span class="messageTime">{{ convertFromUnixToDateTime(message.messageDate) }}</span>
               <v-icon
+                v-if="authStore.userId === message.userId"
                 icon="mdi-check"
                 size="12"
-                color="black"
+                :color="message.isRead ? 'white' : 'black'"
               />
             </div>
           </div>
         </template>
+        <div ref="chatListEndMarker" />
       </v-card-text>
       <v-divider class="my-1" />
       <div class="pa-4">
@@ -118,7 +120,7 @@
 import {convertFromUnixToDateTime} from '../../UserCabinet/helpers/utils';
 import {useChatStore} from '@/modules/Chat/store/chatStore';
 import type {Message} from '@/modules/Chat/interfaces/chat';
-import {computed, onMounted, onUpdated, ref} from 'vue';
+import {computed, nextTick, onMounted, ref, watch} from 'vue';
 import {VForm} from 'vuetify/components';
 import {rules} from '@/modules/Chat/helpers/rules';
 import {useAuthorizationStore} from '@/modules/Authorization/store/authorizationStore';
@@ -138,10 +140,20 @@ const chatForm = ref<null | VForm>(null)
 const userMessage = ref<string>('')
 const isRequestFetching = ref<boolean>(false)
 
-const divs = ref<HTMLSpanElement[]>([])
+const chatListEndMarker = ref<HTMLDivElement | null>(null)
+
+const messageTextSpanRefs = ref<HTMLSpanElement[]>([])
 
 const messages = computed((): Message[] => {
   return chatStore.messages
+})
+
+watch(() => messages.value.length, async () => {
+  await nextTick()
+
+  if (chatListEndMarker.value) {
+    chatListEndMarker.value.scrollIntoView()
+  }
 })
 
 const isChatWindowCollapsed = computed((): boolean => {
@@ -149,7 +161,7 @@ const isChatWindowCollapsed = computed((): boolean => {
 })
 
 const unreadMessages = computed((): number => {
-  return chatStore.collapsedChatMessagesCount
+  return chatStore.unreadChatMessagesCount.length
 })
 
 const isSameUserMessage = (message: Message) => {
@@ -201,9 +213,17 @@ const toggleChatView = () => {
   chatStore.toggleChatView()
 }
 
+const scrollToLastMessage = () => {
+  if (messages.value.length === 0) {
+    return
+  }
+
+  messageTextSpanRefs.value[messages.value.length - 1].scrollIntoView()
+}
+
 onMounted(async () => {
   await chatStore.getMessageList()
-  divs.value[messages.value.length - 1].scrollIntoView()
+  scrollToLastMessage()
 })
 
 </script>
@@ -243,7 +263,7 @@ onMounted(async () => {
 }
 
 .messagesList {
-  height: 350px;
+  height: 400px;
   overflow-y: scroll;
 }
 
