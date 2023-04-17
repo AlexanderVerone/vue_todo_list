@@ -20,6 +20,7 @@
             label="Описание задачи"
             rows="1"
             auto-grow
+            maxlength="200"
             :rules="rules.description"
             @input="resetValidation"
           />

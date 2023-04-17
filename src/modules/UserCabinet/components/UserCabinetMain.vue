@@ -1,7 +1,11 @@
 <template>
   <div>
-    <v-row>
+    <v-row dense>
       <v-col cols="8">
+        <UserCabinetTaskCalendar
+          :todos="todos"
+          class="mb-2"
+        />
         <UserCabinetTable
           :todos="todos"
           :user-id="userId"
@@ -9,10 +13,6 @@
         />
       </v-col>
       <v-col cols="4">
-        <UserCabinetTaskCalendar
-          :todos="todos"
-          class="mb-6"
-        />
         <TheChat :user-id="userId" />
       </v-col>
     </v-row>
@@ -32,7 +32,6 @@ import { TheChat } from '@/modules/Chat';
 
 const cabinetStore = useUserCabinetStore()
 const authStore = useAuthorizationStore()
-
 
 const cabinetToast = ref<InstanceType<typeof TheSnackBar> | null>(null)
 const todos = ref<Todo[]>([])

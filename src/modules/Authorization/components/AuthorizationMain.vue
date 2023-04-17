@@ -88,7 +88,6 @@ const initLogin = async ({email, password}: FormData) => {
 }
 
 const initRegistration = async ({email, password}: FormData) => {
-  toast.value.openSnackBar('hohoho')
   try {
     isRequestFetching.value = true
     await authAPI.initUserRegistration({ email, password })

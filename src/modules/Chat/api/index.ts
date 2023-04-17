@@ -10,8 +10,4 @@ export default {
     return await chatApi.get('/chatMessages')
       .then(response => response.data)
   },
-
-  async postNewMessage (message: Message) {
-    return await chatApi.post('chatMessages', message)
-  }
 }

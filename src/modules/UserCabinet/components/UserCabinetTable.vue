@@ -1,78 +1,107 @@
 <template>
-  <v-table
-    fixed-header
-    fixed-footer
-  >
-    <thead>
-      <tr>
-        <td />
-        <td>Задача</td>
-        <td>Срок выполнения</td>
-        <td />
-      </tr>
-    </thead>
-    <tbody>
-      <TransitionGroup
-        name="tr"
-        mode="out-in"
+  <v-sheet>
+    <Transition
+      name="fade"
+      mode="out-in"
+    >
+      <div
+        v-if="todos.length === 0"
+        class="d-flex flex-column align-center pt-5"
       >
-        <tr
-          v-for="(todo, index) in todos"
-          :key="index"
+        <v-icon
+          icon="mdi-emoticon-sad-outline"
+          size="30"
+          color="primary"
+          class="mb-2"
+        />
+        <p>Нет добавленных задач</p>
+      </div>
+    </Transition>
+    <Transition
+      name="fade"
+      mode="out-in"
+    >
+      <v-table
+        v-if="todos.length > 0"
+        class="todoTable"
+      >
+        <thead>
+          <tr>
+            <td />
+            <td>Задача</td>
+            <td>Срок выполнения</td>
+            <td />
+          </tr>
+        </thead>
+        <TransitionGroup
+          name="tr"
+          tag="tbody"
+          mode="out-in"
         >
-          <td>
-            <v-checkbox
-              v-model="todo.isDone"
-              hide-details
-              @click="toggleTaskIsDone(todo.id)"
-            />
-          </td>
-          <td :class="{'done': todo.isDone}">
-            {{ todo.description }}
-          </td>
-          <td :class="{'done': todo.isDone}">
-            {{ convertFromUnix(todo.deadline) }}
-          </td>
-          <td>
-            <v-tooltip
-              text="Удалить задачу"
-              location="bottom"
+          <tr
+            v-for="(todo, index) in todos"
+            :key="index"
+          >
+            <td class="tableCheckbox">
+              <v-checkbox
+                v-model="todo.isDone"
+                hide-details
+                @click="toggleTaskIsDone(todo.id)"
+              />
+            </td>
+            <td
+              :class="{'done': todo.isDone}"
+              class="tableDescription"
             >
-              <template #activator="{props}">
-                <v-btn
-                  v-bind="props"
-                  density="compact"
-                  size="large"
-                  variant="text"
-                  color="red"
-                  icon="mdi-delete-outline"
-                  @click="deleteTodo(todo.id)"
-                />
-              </template>
-            </v-tooltip>
-          </td>
-        </tr>
-      </TransitionGroup>
-    </tbody>
-    <tfoot>
-      <v-tooltip
-        text="Добавить задачу"
-        location="bottom"
-      >
-        <template #activator="{props}">
-          <v-btn
-            v-bind="props"
-            density="compact"
-            size="large"
-            variant="text"
-            color="green"
-            icon="mdi-plus-circle-outline"
-            @click="openNewTodoModal"
-          />
-        </template>
-      </v-tooltip>
-    </tfoot>
-  </v-table>
+              {{ todo.description }}
+            </td>
+            <td
+              :class="{'done': todo.isDone}"
+              class="tableDeadline"
+            >
+              {{ convertFromUnix(todo.deadline) }}
+            </td>
+            <td class="tableDeleteButton">
+              <v-tooltip
+                text="Удалить задачу"
+                location="bottom"
+              >
+                <template #activator="{props}">
+                  <v-btn
+                    v-bind="props"
+                    density="compact"
+                    size="large"
+                    variant="text"
+                    color="red"
+                    icon="mdi-delete-outline"
+                    @click="deleteTodo(todo.id)"
+                  />
+                </template>
+              </v-tooltip>
+            </td>
+          </tr>
+        </TransitionGroup>
+        <tfoot />
+      </v-table>
+    </Transition>
+
+    <v-tooltip
+      text="Добавить задачу"
+      location="bottom"
+    >
+      <template #activator="{props}">
+        <v-btn
+          v-bind="props"
+          density="compact"
+          size="large"
+          variant="text"
+          color="green"
+          icon="mdi-plus-circle-outline"
+          @click="openNewTodoModal"
+        />
+      </template>
+    </v-tooltip>
+  </v-sheet>
   <TheSnackBar ref="tableToast" />
   <UserCabinetNewTodoModal
     ref="addTodoModal"
@@ -158,7 +187,7 @@ const toggleTaskIsDone = async (todoId: number) => {
 
 <style scoped>
 .done {
-  background-image: linear-gradient(to bottom,  transparent calc(50% - 1px), white, transparent calc(50% + 1px));
+  color: rgba(242, 242, 242, 0.16);
 }
 
 .tr-enter-active {
@@ -170,12 +199,51 @@ const toggleTaskIsDone = async (todoId: number) => {
 }
 
 .tr-enter-from {
-  transform: translateY(-30px);
+  /*transform: translateY(-30px);*/
   opacity: 0;
 }
 
 .tr-leave-to {
-  transform: translateY(30px);
+  /*transform: translateY(30px);*/
   opacity: 0;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 0.3s ease-out;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+  transform: translateY(100px);
+}
+
+.tableCheckbox {
+  width: 10%;
+}
+
+.tableDescription {
+  width: 50%;
+
+}
+
+.tableDeadline {
+  width: 20%;
+  text-align: center;
+}
+
+.tableDeleteButton {
+  width: 10%;
+  text-align: center;
+}
+
+.todoTable {
+  max-height: 290px;
+  overflow: scroll;
+}
+
+.todoTable thead {
+  text-align: center;
 }
 </style>
