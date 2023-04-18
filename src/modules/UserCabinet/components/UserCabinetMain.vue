@@ -8,7 +8,6 @@
         />
         <UserCabinetTable
           :todos="todos"
-          :user-id="userId"
           @update-todos="initTodos"
         />
       </v-col>
@@ -24,7 +23,7 @@
 import UserCabinetTable from '@/modules/UserCabinet/components/UserCabinetTable.vue';
 import UserCabinetTaskCalendar from '@/modules/UserCabinet/components/UserCabinetTaskCalendar.vue';
 import {computed, onMounted, ref} from 'vue';
-import {Todo} from '@/modules/UserCabinet/interfaces';
+import type {Todo} from '@/modules/UserCabinet/interfaces';
 import {useUserCabinetStore} from '@/modules/UserCabinet/store/userCabinetStore';
 import {useAuthorizationStore} from '@/modules/Authorization/store/authorizationStore';
 import TheSnackBar from '@/components/TheSnackBar.vue';
@@ -49,7 +48,9 @@ const initTodos = async () => {
     todos.value = cabinetStore.todos
   } catch (error: any) {
     const errorMessage = error.response.data.message
-    cabinetToast.value.openSnackBar(errorMessage, 'error')
+    if (cabinetToast.value) {
+      cabinetToast.value.openSnackBar(errorMessage, 'error')
+    }
   }
 }
 

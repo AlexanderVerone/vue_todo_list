@@ -13,8 +13,8 @@
 </template>
 
 <script setup lang="ts">
-import {computed, PropType} from 'vue';
-import {Todo} from '@/modules/UserCabinet/interfaces';
+import {computed, type PropType} from 'vue';
+import type {Todo} from '@/modules/UserCabinet/interfaces';
 
 const props = defineProps({
   todos: {

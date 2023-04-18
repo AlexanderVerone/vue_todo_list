@@ -80,7 +80,9 @@ const initLogin = async ({email, password}: FormData) => {
     redirectToUserCabinet()
   } catch (error: any) {
     const errorMessage = error.response.data.message
-    toast.value.openSnackBar(errorMessage, 'error')
+    if (toast.value) {
+      toast.value.openSnackBar(errorMessage, 'error')
+    }
   } finally {
     resetForms()
     isRequestFetching.value = false
@@ -91,11 +93,16 @@ const initRegistration = async ({email, password}: FormData) => {
   try {
     isRequestFetching.value = true
     await authAPI.initUserRegistration({ email, password })
-    toast.value.openSnackBar('Пользователь успешно создан', 'success')
+    if (toast.value) {
+      toast.value.openSnackBar('Пользователь успешно создан', 'success')
+    }
+
     tab.value = 'login'
   } catch (error: any) {
     const errorMessage = error.response.data.message
-    toast.value.openSnackBar(errorMessage, 'error')
+    if (toast.value) {
+      toast.value.openSnackBar(errorMessage, 'error')
+    }
   } finally {
     resetForms()
     isRequestFetching.value = false

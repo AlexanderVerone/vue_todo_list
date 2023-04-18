@@ -66,7 +66,7 @@
             <p class="messageUser">
               {{ message.userName }}:
             </p>
-            <span :ref="el => { messageTextSpanRefs[index] = el }">
+            <span>
               {{ message.text }}
             </span>
             <v-divider class="my-1" />
@@ -141,7 +141,6 @@ const userMessage = ref<string>('')
 const isRequestFetching = ref<boolean>(false)
 
 const chatListEndMarker = ref<HTMLDivElement | null>(null)
-const messageTextSpanRefs = ref<HTMLSpanElement[]>([])
 
 const messages = computed((): Message[] => {
   return chatStore.messages
@@ -203,11 +202,11 @@ const toggleChatView = () => {
 }
 
 const scrollToLastMessage = () => {
-  if (messages.value.length === 0) {
+  if (messages.value.length === 0 || !chatListEndMarker.value) {
     return
   }
-
-  messageTextSpanRefs.value[messages.value.length - 1].scrollIntoView()
+  
+  chatListEndMarker.value.scrollIntoView()
 }
 
 onMounted(async () => {

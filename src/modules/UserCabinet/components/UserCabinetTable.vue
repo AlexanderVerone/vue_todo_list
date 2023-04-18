@@ -110,53 +110,63 @@
 </template>
 
 <script lang="ts" setup>
-import {computed, PropType, ref} from 'vue';
+import {computed, type PropType, ref} from 'vue';
 import TheSnackBar from '@/components/TheSnackBar.vue';
 import type {NewTodo, Todo} from '@/modules/UserCabinet/interfaces';
 import { convertFromUnixToDate } from '@/modules/UserCabinet/helpers/utils';
 import {useUserCabinetStore} from '@/modules/UserCabinet/store/userCabinetStore';
 import UserCabinetNewTodoModal from '@/modules/UserCabinet/components/UserCabinetNewTodoModal.vue';
+import {useAuthorizationStore} from '@/modules/Authorization/store/authorizationStore';
 
 const props = defineProps({
   todos: {
     type: Array as PropType<Todo[]>,
     required: true
   },
-  userId: {
-    type: Number,
-    default: null,
-  }
 })
 
 const emit = defineEmits(['update-todos'])
 
 const cabinetStore = useUserCabinetStore()
+const authStore = useAuthorizationStore()
 
 const tableToast = ref<InstanceType<typeof TheSnackBar> | null>(null)
 const addTodoModal = ref<InstanceType<typeof UserCabinetNewTodoModal>| null>(null)
+
+const userId = computed((): number | null => {
+  return authStore.userId
+})
 
 const isNoTodos = computed((): boolean => {
   return props.todos.length === 0
 })
 
 const openNewTodoModal = () => {
+  if (!addTodoModal.value) {
+    return
+  }
+
   addTodoModal.value.open()
 }
 
 const addTodo = async (newTodoData: NewTodo) => {
-  if (!props.userId) {
+  if (!userId.value) {
     return
   }
 
-  newTodoData.userId = props.userId
+  newTodoData.userId = userId.value
 
   try {
     await cabinetStore.addTodo(newTodoData)
     emit('update-todos')
-    tableToast.value.openSnackBar('Задача добавлена', 'success')
+    if (tableToast.value) {
+      tableToast.value.openSnackBar('Задача добавлена', 'success')
+    }
   } catch (error: any) {
     const errorMessage = error.response.data.message
-    tableToast.value.openSnackBar(errorMessage, 'error')
+    if (tableToast.value) {
+      tableToast.value.openSnackBar(errorMessage, 'error')
+    }
   }
 }
 
@@ -168,10 +178,14 @@ const deleteTodo = async (todoId: number) => {
   try {
     await cabinetStore.deleteTodo(todoId)
     emit('update-todos')
-    tableToast.value.openSnackBar('Задача удалена', 'success')
+    if (tableToast.value) {
+      tableToast.value.openSnackBar('Задача удалена', 'success')
+    }
   } catch (error: any) {
     const errorMessage = error.response.data.message
-    tableToast.value.openSnackBar(errorMessage, 'error')
+    if (tableToast.value) {
+      tableToast.value.openSnackBar(errorMessage, 'error')
+    }
   }
 }
 
@@ -184,7 +198,9 @@ const toggleTaskIsDone = async (todoId: number) => {
     await cabinetStore.toggleTodoCompletion(todoId)
   } catch (error: any) {
     const errorMessage = error.response.data.message
-    tableToast.value.openSnackBar(errorMessage, 'error')
+    if (tableToast.value) {
+      tableToast.value.openSnackBar(errorMessage, 'error')
+    }
   }
 }
 </script>

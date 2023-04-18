@@ -3,7 +3,7 @@
     v-model="isActive"
     :timeout="timeout"
     :color="messageType"
-    :location="location"
+    location="top right"
     width="auto"
   >
     {{ message }}
@@ -18,10 +18,6 @@ defineProps({
     type: Number,
     default: 3000
   },
-  location: {
-    type: String,
-    default: 'top right'
-  }
 })
 
 const isActive = ref<boolean>(false)
