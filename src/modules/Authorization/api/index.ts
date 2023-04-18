@@ -1,4 +1,4 @@
-import type {UserData} from '@/modules/Authorization/helpers/types';
+import type {UserData} from '@/modules/Authorization/interfaces';
 import axiosInstance from '@/plugins/axios';
 
 export default {
@@ -7,7 +7,8 @@ export default {
       .then(response => response.data)
   },
 
-  async initUserRegistration(userData: UserData): Promise<String> {
+  async initUserRegistration(userData: UserData): Promise<string> {
     return await axiosInstance.post('auth/registration', userData)
+      .then(response => response.data)
   }
 }

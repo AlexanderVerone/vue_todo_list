@@ -28,15 +28,15 @@
 import {useAuthorizationStore} from '@/modules/Authorization/store/authorizationStore';
 import {computed} from 'vue';
 
-const authorizationStore = useAuthorizationStore()
-const isUserAuthenticated = computed((): boolean => authorizationStore.isAuthenticated)
+const authStore = useAuthorizationStore()
+const isUserAuthenticated = computed((): boolean => authStore.isAuthenticated)
 
 const userName = computed((): string => {
-  return authorizationStore.userEmail
+  return authStore.userEmail
 })
 
 const logout = () => {
-  authorizationStore.logout()
+  authStore.logout()
 }
 </script>
 

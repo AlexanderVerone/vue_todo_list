@@ -5,7 +5,7 @@
       mode="out-in"
     >
       <div
-        v-if="todos.length === 0"
+        v-if="isNoTodos"
         class="d-flex flex-column align-center pt-5"
       >
         <v-icon
@@ -22,7 +22,7 @@
       mode="out-in"
     >
       <v-table
-        v-if="todos.length > 0"
+        v-if="!isNoTodos"
         class="todoTable"
       >
         <thead>
@@ -59,7 +59,7 @@
               :class="{'done': todo.isDone}"
               class="tableDeadline"
             >
-              {{ convertFromUnix(todo.deadline) }}
+              {{ convertFromUnixToDate(todo.deadline) }}
             </td>
             <td class="tableDeleteButton">
               <v-tooltip
@@ -110,10 +110,10 @@
 </template>
 
 <script lang="ts" setup>
-import {PropType, ref} from 'vue';
+import {computed, PropType, ref} from 'vue';
 import TheSnackBar from '@/components/TheSnackBar.vue';
-import type {NewTodo, Todo} from '@/modules/UserCabinet/interfaces/todos.interface';
-import { convertFromUnix } from '@/modules/UserCabinet/helpers/utils';
+import type {NewTodo, Todo} from '@/modules/UserCabinet/interfaces';
+import { convertFromUnixToDate } from '@/modules/UserCabinet/helpers/utils';
 import {useUserCabinetStore} from '@/modules/UserCabinet/store/userCabinetStore';
 import UserCabinetNewTodoModal from '@/modules/UserCabinet/components/UserCabinetNewTodoModal.vue';
 
@@ -134,6 +134,10 @@ const cabinetStore = useUserCabinetStore()
 
 const tableToast = ref<InstanceType<typeof TheSnackBar> | null>(null)
 const addTodoModal = ref<InstanceType<typeof UserCabinetNewTodoModal>| null>(null)
+
+const isNoTodos = computed((): boolean => {
+  return props.todos.length === 0
+})
 
 const openNewTodoModal = () => {
   addTodoModal.value.open()

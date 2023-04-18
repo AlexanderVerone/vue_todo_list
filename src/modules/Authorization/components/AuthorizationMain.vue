@@ -41,18 +41,24 @@
 <script lang="ts" setup>
 import {ref, watch} from 'vue';
 import AuthorizationForm from '@/modules/Authorization/components/AuthorizationForm.vue';
-import type {FormData} from '@/modules/Authorization/helpers/types';
+import type {FormData} from '@/modules/Authorization/interfaces';
 import authAPI from '@/modules/Authorization/api';
 import TheSnackBar from '@/components/TheSnackBar.vue';
 import {useAuthorizationStore} from '@/modules/Authorization/store/authorizationStore';
 import router from '@/router';
 
-const authorizationStore = useAuthorizationStore()
+const authStore = useAuthorizationStore()
 
 const toast = ref<InstanceType<typeof TheSnackBar> | null>(null)
-
 const login = ref<InstanceType<typeof AuthorizationForm> | null>(null)
 const register = ref<InstanceType<typeof AuthorizationForm> | null>(null)
+
+const tab = ref<string>('')
+const isRequestFetching = ref<boolean>(false)
+
+watch(tab, () => {
+  resetForms()
+})
 
 const resetForms = () => {
   if (login.value) {
@@ -65,17 +71,11 @@ const resetForms = () => {
   }
 }
 
-const tab = ref<string>('')
-watch(tab, () => {
-  resetForms()
-})
-const isRequestFetching = ref<boolean>(false)
-
 const initLogin = async ({email, password}: FormData) => {
   try {
     isRequestFetching.value = true
     const { token } = await authAPI.initUserLogin({ email, password })
-    authorizationStore.handleUserToken(token)
+    authStore.handleUserToken(token)
 
     redirectToUserCabinet()
   } catch (error: any) {
@@ -108,19 +108,19 @@ const initAuthorization = async (data: FormData) => {
 
     return
   }
-    
+
   if (data.formType === 'register') {
     await initRegistration(data)
-      
+
     return
   }
 }
 
 const redirectToUserCabinet = () => {
-  if (!authorizationStore.userId) {
+  if (!authStore.userId) {
     return
   }
 
-  router.push(`/user/${authorizationStore.userId}`)
+  router.push(`/user/${authStore.userId}`)
 }
 </script>

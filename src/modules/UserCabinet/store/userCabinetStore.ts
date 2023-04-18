@@ -2,7 +2,7 @@ import {defineStore} from 'pinia';
 import type {
   NewTodo,
   Todo
-} from '@/modules/UserCabinet/interfaces/todos.interface';
+} from '@/modules/UserCabinet/interfaces';
 import {ref} from 'vue';
 import UserCabinetApi from '@/modules/UserCabinet/api';
 

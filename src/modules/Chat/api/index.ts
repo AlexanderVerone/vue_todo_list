@@ -1,5 +1,5 @@
 import axiosInstance from '@/plugins/axios';
-import type {Message} from '@/modules/Chat/interfaces/chat';
+import type {Message} from '@/modules/Chat/interfaces';
 
 export default {
   async getChatMessages (): Promise<Message[]> {

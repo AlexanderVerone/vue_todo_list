@@ -1,15 +1,15 @@
-import { defineStore } from 'pinia';
+import {defineStore} from 'pinia';
 import {onMounted, ref} from 'vue';
 import {io, Socket} from 'socket.io-client';
 import type {
   Message
-} from '@/modules/Chat/interfaces/chat';
+} from '@/modules/Chat/interfaces';
 import ChatApi from '@/modules/Chat/api';
 import {
   useAuthorizationStore
 } from '@/modules/Authorization/store/authorizationStore';
 
-export const useChatStore = defineStore('wss', () => {
+export const useChatStore = defineStore('chat', () => {
   const authStore = useAuthorizationStore()
   const userId = authStore.userId
 
@@ -95,6 +95,7 @@ export const useChatStore = defineStore('wss', () => {
     messages,
     isChatWindowCollapsed,
     toggleChatView,
-    unreadChatMessagesCount
+    unreadChatMessagesCount,
+    connected,
   }
 })

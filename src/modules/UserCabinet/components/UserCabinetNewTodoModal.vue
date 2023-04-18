@@ -22,7 +22,7 @@
             auto-grow
             maxlength="200"
             :rules="rules.description"
-            @input="resetValidation"
+            @input="useResetFormValidation(form)"
           />
           <div class="d-flex flex-column align-center mt-3">
             <h3>
@@ -72,7 +72,8 @@
 import {ref} from 'vue';
 import {VForm} from 'vuetify/components';
 import {rules} from '@/modules/UserCabinet/helpers/rules';
-import type {NewTodo} from '@/modules/UserCabinet/interfaces/todos.interface';
+import type {NewTodo} from '@/modules/UserCabinet/interfaces';
+import { useResetFormValidation, useValidateForm } from '@/composables/useForm';
 
 const calendarAttributes = ref([
   {
@@ -104,7 +105,7 @@ const close = () => {
 }
 
 const emitAddNewTodo = async () => {
-  const isFormValid = await isUserDataValid()
+  const isFormValid = await useValidateForm(form.value)
 
   if (!newTodoData.value.deadline) {
     isDeadlineDateEmpty.value = true
@@ -120,24 +121,6 @@ const emitAddNewTodo = async () => {
 
   emit('add-todo', newTodoData.value)
   close()
-}
-
-const isUserDataValid = async (): Promise<boolean> => {
-  if (!form.value) {
-    return false
-  }
-
-  const result = await form.value.validate()
-
-  return result.valid
-}
-
-const resetValidation = () => {
-  if (!form.value) {
-    return
-  }
-
-  form.value.resetValidation()
 }
 
 const resetForm = () => {

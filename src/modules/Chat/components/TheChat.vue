@@ -18,6 +18,10 @@
       rounded
     >
       <v-card-title class="text-center">
+        <v-icon
+          icon="mdi-circle-medium"
+          :color="isConnectionActive ? 'green' : 'red'"
+        />
         Поболтаем ?
         <v-tooltip
           text="Свернуть чат"
@@ -39,7 +43,7 @@
       <v-divider class="my-1" />
       <v-card-text class="messagesList">
         <div
-          v-if="messages.length === 0"
+          v-if="isNoMessages"
           class="d-flex flex-column justify-center align-center"
         >
           <v-icon
@@ -52,7 +56,7 @@
             Пока никто ничего не написал
           </p>
         </div>
-        <template v-if="messages.length > 0">
+        <template v-if="!isNoMessages">
           <div
             v-for="(message, index) in messages"
             :key="index"
@@ -62,12 +66,14 @@
             <p class="messageUser">
               {{ message.userName }}:
             </p>
-            <span :ref="el => { messageTextSpanRefs[index] = el }">{{ message.text }}</span>
+            <span :ref="el => { messageTextSpanRefs[index] = el }">
+              {{ message.text }}
+            </span>
             <v-divider class="my-1" />
             <div class="d-flex justify-space-between">
               <span class="messageTime">{{ convertFromUnixToDateTime(message.messageDate) }}</span>
               <v-icon
-                v-if="authStore.userId === message.userId"
+                v-if="isSameUserMessage(message)"
                 icon="mdi-check"
                 size="12"
                 :color="message.isRead ? 'white' : 'black'"
@@ -96,7 +102,7 @@
             maxlength="255"
             :rules="rules.chatMessage"
             class="mb-2"
-            @input="resetValidation"
+            @input="useResetFormValidation(chatForm)"
             @keyup.enter="sendMessage"
           />
         </v-form>
@@ -119,12 +125,13 @@
 
 import {convertFromUnixToDateTime} from '../../UserCabinet/helpers/utils';
 import {useChatStore} from '@/modules/Chat/store/chatStore';
-import type {Message} from '@/modules/Chat/interfaces/chat';
+import type {Message} from '@/modules/Chat/interfaces';
 import {computed, nextTick, onMounted, ref, watch} from 'vue';
 import {VForm} from 'vuetify/components';
 import {rules} from '@/modules/Chat/helpers/rules';
 import {useAuthorizationStore} from '@/modules/Authorization/store/authorizationStore';
 import moment from 'moment';
+import { useResetFormValidation, useValidateForm } from '@/composables/useForm';
 
 const chatStore = useChatStore()
 const authStore = useAuthorizationStore()
@@ -134,19 +141,10 @@ const userMessage = ref<string>('')
 const isRequestFetching = ref<boolean>(false)
 
 const chatListEndMarker = ref<HTMLDivElement | null>(null)
-
 const messageTextSpanRefs = ref<HTMLSpanElement[]>([])
 
 const messages = computed((): Message[] => {
   return chatStore.messages
-})
-
-watch(() => messages.value.length, async () => {
-  await nextTick()
-
-  if (chatListEndMarker.value) {
-    chatListEndMarker.value.scrollIntoView()
-  }
 })
 
 const isChatWindowCollapsed = computed((): boolean => {
@@ -157,7 +155,23 @@ const unreadMessages = computed((): number => {
   return chatStore.unreadChatMessagesCount.length
 })
 
-const isSameUserMessage = (message: Message) => {
+const isNoMessages = computed((): boolean => {
+  return messages.value.length === 0
+})
+
+const isConnectionActive = computed((): boolean => {
+  return chatStore.connected
+})
+
+watch(() => messages.value.length, async () => {
+  await nextTick()
+
+  if (chatListEndMarker.value) {
+    chatListEndMarker.value.scrollIntoView()
+  }
+})
+
+const isSameUserMessage = (message: Message): boolean => {
   return message.userId === authStore.userId
 }
 
@@ -166,7 +180,7 @@ const sendMessage = async () => {
     return
   }
 
-  const isFormValid = await validateUserData()
+  const isFormValid = await useValidateForm(chatForm.value)
 
   if (!isFormValid || !authStore.userId) {
     return
@@ -182,24 +196,6 @@ const sendMessage = async () => {
 
   await chatStore.sendMessage(messageBody)
   userMessage.value = ''
-}
-
-const validateUserData = async (): Promise<boolean> => {
-  if (!chatForm.value) {
-    return false
-  }
-
-  const result = await chatForm.value.validate()
-
-  return result.valid
-}
-
-const resetValidation = () => {
-  if (!chatForm.value) {
-    return
-  }
-
-  chatForm.value.resetValidation()
 }
 
 const toggleChatView = () => {

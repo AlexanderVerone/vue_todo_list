@@ -20,10 +20,10 @@ import TheHeader from '@/components/TheHeader.vue';
 import {onMounted} from 'vue';
 import {useAuthorizationStore} from '@/modules/Authorization/store/authorizationStore';
 
-const authorizationStore = useAuthorizationStore()
+const authStore = useAuthorizationStore()
 
 onMounted(() => {
-  authorizationStore.checkAuthorization()
+  authStore.checkAuthorization()
 })
 </script>
 

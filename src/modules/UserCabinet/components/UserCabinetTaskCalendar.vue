@@ -14,7 +14,7 @@
 
 <script setup lang="ts">
 import {computed, PropType} from 'vue';
-import {Todo} from '@/modules/UserCabinet/interfaces/todos.interface';
+import {Todo} from '@/modules/UserCabinet/interfaces';
 
 const props = defineProps({
   todos: {

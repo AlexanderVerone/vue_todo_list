@@ -24,7 +24,7 @@
 import UserCabinetTable from '@/modules/UserCabinet/components/UserCabinetTable.vue';
 import UserCabinetTaskCalendar from '@/modules/UserCabinet/components/UserCabinetTaskCalendar.vue';
 import {computed, onMounted, ref} from 'vue';
-import {Todo} from '@/modules/UserCabinet/interfaces/todos.interface';
+import {Todo} from '@/modules/UserCabinet/interfaces';
 import {useUserCabinetStore} from '@/modules/UserCabinet/store/userCabinetStore';
 import {useAuthorizationStore} from '@/modules/Authorization/store/authorizationStore';
 import TheSnackBar from '@/components/TheSnackBar.vue';
@@ -34,6 +34,7 @@ const cabinetStore = useUserCabinetStore()
 const authStore = useAuthorizationStore()
 
 const cabinetToast = ref<InstanceType<typeof TheSnackBar> | null>(null)
+
 const todos = ref<Todo[]>([])
 
 const userId = computed((): number | null => authStore.userId)

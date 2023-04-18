@@ -14,7 +14,7 @@
       maxlength="40"
       append-inner-icon="mdi-account"
       class="mb-2"
-      @input="resetValidation"
+      @input="useResetFormValidation(form)"
     />
     <v-text-field
       v-model.trim="userPassword"
@@ -24,7 +24,7 @@
       maxlength="40"
       class="mb-2"
       append-inner-icon="mdi-key"
-      @input="resetValidation"
+      @input="useResetFormValidation(form)"
     />
     <v-btn
       block
@@ -40,8 +40,9 @@
 
 <script lang="ts" setup>
 import {VForm} from 'vuetify/components';
-import {computed, onUpdated, ref} from 'vue';
-import { rules } from '@/modules/Authorization/helpers/authorizationRules';
+import {computed, ref} from 'vue';
+import {rules} from '@/modules/Authorization/helpers/rules';
+import { useResetFormValidation, useValidateForm } from '@/composables/useForm';
 
 const props = defineProps({
   formType: {
@@ -72,22 +73,12 @@ const submitButtonName = computed((): string => {
   return 'Тип формы не указан'
 })
 
-const validateUserData = async (): Promise<boolean> => {
-  if (!form.value) {
-    return false
-  }
-
-  const result = await form.value.validate()
-
-  return result.valid
-}
-
 const emitFormSubmit = async () => {
   if (!form.value) {
     return
   }
 
-  const isFormValid = await validateUserData()
+  const isFormValid = await useValidateForm(form.value)
 
   if (!isFormValid) {
     return
@@ -98,14 +89,6 @@ const emitFormSubmit = async () => {
     password: userPassword.value, 
     formType: props.formType 
   })
-}
-
-const resetValidation = () => {
-  if (!form.value) {
-    return
-  }
-
-  form.value.resetValidation()
 }
 
 const resetForm = () => {

@@ -2,7 +2,7 @@ import axiosInstance from '@/plugins/axios';
 import type {
   NewTodo,
   Todo
-} from '@/modules/UserCabinet/interfaces/todos.interface';
+} from '@/modules/UserCabinet/interfaces';
 
 export default {
   async getTodoList (userId: number): Promise<Todo[]> {
