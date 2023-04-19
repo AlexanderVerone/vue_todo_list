@@ -8,6 +8,7 @@ import ChatApi from '@/modules/Chat/api';
 import {
   useAuthorizationStore
 } from '@/modules/Authorization/store/authorizationStore';
+import * as process from 'process';
 
 export const useChatStore = defineStore('chat', () => {
   const authStore = useAuthorizationStore()
@@ -19,7 +20,7 @@ export const useChatStore = defineStore('chat', () => {
   const unreadChatMessagesCount = ref<Message[]>([])
   const isApplicationBrowserTabActive = ref<boolean>(true)
 
-  const URL: string = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:4000'
+  const URL: string = process.env.NODE_ENV === 'production' ? '' : import.meta.env.VITE_ENDPOINT_HOST
   const socket: Socket = io(URL)
 
   socket.on('newMessage', (newMessage: Message) => {
