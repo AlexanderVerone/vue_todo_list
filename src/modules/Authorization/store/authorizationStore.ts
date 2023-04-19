@@ -14,14 +14,18 @@ export const useAuthorizationStore = defineStore('authorization', () => {
       return
     }
 
-    const parsedUserData = parseJwt(jwtToken)
-    userEmail.value = parsedUserData.email
-    userRoles.value = parsedUserData.roles
-    userId.value = parsedUserData.id
-    isAuthenticated.value = true
+    try {
+      const parsedUserData = parseJwt(jwtToken)
+      userEmail.value = parsedUserData.email
+      userRoles.value = parsedUserData.roles
+      userId.value = parsedUserData.id
+      isAuthenticated.value = true
 
-    localStorage.setItem('token', jwtToken)
-    localStorage.setItem('userId', String(userId.value))
+      localStorage.setItem('token', jwtToken)
+      localStorage.setItem('userId', String(userId.value))
+    } catch (error: any) {
+      logout()
+    }
   }
 
   const logout = () => {
