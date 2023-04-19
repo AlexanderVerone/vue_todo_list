@@ -1,22 +1,30 @@
 <template>
   <v-sheet>
-    <Transition
-      name="fade"
-      mode="out-in"
-    >
-      <div
-        v-if="isNoTodos"
-        class="d-flex flex-column align-center pt-5"
+    <div class="d-flex justify-center pt-4">
+      <v-btn
+        v-bind="props"
+        density="compact"
+        size="large"
+        variant="outlined"
+        color="green"
+        append-icon="mdi-plus-circle-outline"
+        @click="openNewTodoModal"
       >
-        <v-icon
-          icon="mdi-emoticon-sad-outline"
-          size="30"
-          color="primary"
-          class="mb-2"
-        />
-        <p>Нет добавленных задач</p>
-      </div>
-    </Transition>
+        Добавить задачу
+      </v-btn>
+    </div>
+    <div
+      v-if="isNoTodos"
+      class="d-flex flex-column align-center py-5"
+    >
+      <v-icon
+        icon="mdi-emoticon-sad-outline"
+        size="30"
+        color="primary"
+        class="mb-2"
+      />
+      <p>Нет добавленных задач</p>
+    </div>
     <Transition
       name="fade"
       mode="out-in"
@@ -27,7 +35,7 @@
       >
         <thead>
           <tr>
-            <td />
+            <td>Выполнено?</td>
             <td>Задача</td>
             <td>Срок выполнения</td>
             <td />
@@ -84,23 +92,6 @@
         <tfoot />
       </v-table>
     </Transition>
-
-    <v-tooltip
-      text="Добавить задачу"
-      location="bottom"
-    >
-      <template #activator="{props}">
-        <v-btn
-          v-bind="props"
-          density="compact"
-          size="large"
-          variant="text"
-          color="green"
-          icon="mdi-plus-circle-outline"
-          @click="openNewTodoModal"
-        />
-      </template>
-    </v-tooltip>
   </v-sheet>
   <TheSnackBar ref="tableToast" />
   <UserCabinetNewTodoModal
@@ -228,19 +219,9 @@ const toggleTaskIsDone = async (todoId: number) => {
   opacity: 0;
 }
 
-.fade-enter-active,
-.fade-leave-active {
-  transition: all 0.3s ease-out;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-  transform: translateY(100px);
-}
-
 .tableCheckbox {
-  width: 10%;
+  width: 20%;
+  padding-left: 30px !important;
 }
 
 .tableDescription {
@@ -261,9 +242,5 @@ const toggleTaskIsDone = async (todoId: number) => {
 .todoTable {
   max-height: 290px;
   overflow: scroll;
-}
-
-.todoTable thead {
-  text-align: center;
 }
 </style>
