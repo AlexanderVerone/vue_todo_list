@@ -50,3 +50,11 @@ npm run test:unit
 ```sh
 npm run lint
 ```
+
+### Run Application in Docker
+```
+docker build . -t front:latest
+```
+```
+docker run -p 5173:5173 <builded image ID>
+```
