@@ -1,6 +1,6 @@
 export const rules = {
   email: [
-    (value: string) => {
+    (value: string | null) => {
       if (value) {
         return true
       }
