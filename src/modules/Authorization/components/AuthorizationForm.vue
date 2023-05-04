@@ -3,6 +3,7 @@
     @submit.prevent
     validate-on="submit"
     ref="form"
+    data-testid="authForm"
     :disabled="isRequestFetching"
   >
     <v-text-field
@@ -24,6 +25,7 @@
       maxlength="40"
       class="mb-2"
       append-inner-icon="mdi-key"
+      placeholder="password"
       @input="useResetFormValidation(form)"
     />
     <v-btn
@@ -31,6 +33,7 @@
       type="submit"
       color="primary"
       :loading="isRequestFetching"
+      data-testid="authButton"
       @click="emitFormSubmit"
     >
       {{ submitButtonName }}
