@@ -105,9 +105,9 @@ import {computed, type PropType, ref} from 'vue';
 import TheSnackBar from '@/components/TheSnackBar.vue';
 import type {NewTodo, Todo} from '@/modules/UserCabinet/interfaces';
 import { convertFromUnixToDate } from '@/modules/UserCabinet/helpers/utils';
-import {useUserCabinetStore} from '@/modules/UserCabinet/store/userCabinetStore';
+import {useUserCabinetStore} from '@/modules/UserCabinet/store';
 import UserCabinetNewTodoModal from '@/modules/UserCabinet/components/UserCabinetNewTodoModal.vue';
-import {useAuthorizationStore} from '@/modules/Authorization/store/authorizationStore';
+import {useAuthorizationStore} from '@/modules/Authorization/store';
 
 const props = defineProps({
   todos: {

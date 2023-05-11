@@ -18,7 +18,7 @@
 import { RouterView } from 'vue-router'
 import TheHeader from '@/components/TheHeader.vue';
 import {onMounted} from 'vue';
-import {useAuthorizationStore} from '@/modules/Authorization/store/authorizationStore';
+import {useAuthorizationStore} from '@/modules/Authorization/store';
 
 const authStore = useAuthorizationStore()
 

@@ -24,8 +24,8 @@ import UserCabinetTable from '@/modules/UserCabinet/components/UserCabinetTable.
 import UserCabinetTaskCalendar from '@/modules/UserCabinet/components/UserCabinetTaskCalendar.vue';
 import {computed, onMounted, ref} from 'vue';
 import type {Todo} from '@/modules/UserCabinet/interfaces';
-import {useUserCabinetStore} from '@/modules/UserCabinet/store/userCabinetStore';
-import {useAuthorizationStore} from '@/modules/Authorization/store/authorizationStore';
+import {useUserCabinetStore} from '@/modules/UserCabinet/store';
+import {useAuthorizationStore} from '@/modules/Authorization/store';
 import TheSnackBar from '@/components/TheSnackBar.vue';
 import { TheChat } from '@/modules/Chat';
 

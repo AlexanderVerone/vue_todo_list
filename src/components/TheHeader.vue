@@ -25,7 +25,7 @@
 </template>
 
 <script setup lang="ts">
-import {useAuthorizationStore} from '@/modules/Authorization/store/authorizationStore';
+import {useAuthorizationStore} from '@/modules/Authorization/store';
 import {computed} from 'vue';
 
 const authStore = useAuthorizationStore()

@@ -44,7 +44,7 @@ import AuthorizationForm from '@/modules/Authorization/components/AuthorizationF
 import type {FormData} from '@/modules/Authorization/interfaces';
 import authAPI from '@/modules/Authorization/api';
 import TheSnackBar from '@/components/TheSnackBar.vue';
-import {useAuthorizationStore} from '@/modules/Authorization/store/authorizationStore';
+import {useAuthorizationStore} from '@/modules/Authorization/store';
 import router from '@/router';
 
 const authStore = useAuthorizationStore()

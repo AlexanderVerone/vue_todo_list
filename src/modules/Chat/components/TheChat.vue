@@ -124,12 +124,12 @@
 <script setup lang="ts">
 
 import {convertFromUnixToDateTime} from '../../UserCabinet/helpers/utils';
-import {useChatStore} from '@/modules/Chat/store/chatStore';
+import {useChatStore} from '@/modules/Chat/store';
 import type {Message} from '@/modules/Chat/interfaces';
 import {computed, nextTick, onMounted, ref, watch} from 'vue';
 import {VForm} from 'vuetify/components';
 import {rules} from '@/modules/Chat/helpers/rules';
-import {useAuthorizationStore} from '@/modules/Authorization/store/authorizationStore';
+import {useAuthorizationStore} from '@/modules/Authorization/store';
 import moment from 'moment';
 import { useResetFormValidation, useValidateForm } from '@/composables/useForm';
 

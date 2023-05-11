@@ -1,5 +1,5 @@
 import {beforeEach, describe, expect, it, vi} from 'vitest';
-import {useUserCabinetStore} from '@/modules/UserCabinet/store/userCabinetStore';
+import {useUserCabinetStore} from '@/modules/UserCabinet/store';
 import {createPinia, setActivePinia} from 'pinia';
 import axiosInstance from '@/plugins/axios';
 import {flushPromises} from '@vue/test-utils';

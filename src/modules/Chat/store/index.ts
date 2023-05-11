@@ -7,7 +7,7 @@ import type {
 import ChatApi from '@/modules/Chat/api';
 import {
   useAuthorizationStore
-} from '@/modules/Authorization/store/authorizationStore';
+} from '@/modules/Authorization/store';
 import * as process from 'process';
 
 export const useChatStore = defineStore('chat', () => {

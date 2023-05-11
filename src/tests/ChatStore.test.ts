@@ -1,6 +1,6 @@
 import {describe, beforeEach, it, expect, vi} from 'vitest';
 import {createPinia, setActivePinia} from 'pinia';
-import {useChatStore} from '@/modules/Chat/store/chatStore';
+import {useChatStore} from '@/modules/Chat/store';
 import axiosInstance from '@/plugins/axios';
 import {flushPromises, mount} from '@vue/test-utils';
 import {TheChat} from '@/modules/Chat';
