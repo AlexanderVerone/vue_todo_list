@@ -2,14 +2,47 @@ import {describe, beforeEach, it, expect, vi} from 'vitest';
 import {createPinia, setActivePinia} from 'pinia';
 import {useChatStore} from '@/modules/Chat/store/chatStore';
 import axiosInstance from '@/plugins/axios';
-import {flushPromises} from '@vue/test-utils';
+import {flushPromises, mount} from '@vue/test-utils';
+import {TheChat} from '@/modules/Chat';
+import {createVuetify} from 'vuetify';
+import * as components from 'vuetify/components';
+import * as directives from 'vuetify/directives';
+import {aliases, mdi} from 'vuetify/iconsets/mdi';
+import {createTestingPinia} from '@pinia/testing';
 
 describe('chatStore', () => {
   beforeEach(() => {
+    global.ResizeObserver = class ResizeObserver {
+      observe() {}
+      unobserve() {}
+      disconnect() {}
+    };
+
     setActivePinia(createPinia())
   })
 
   it ('initializes with empty values', () => {
+    const vuetify = createVuetify({
+      components,
+      directives,
+      icons: {
+        defaultSet: 'mdi',
+        aliases,
+        sets: {
+          mdi,
+        }
+      },
+      theme: {
+        defaultTheme: 'dark'
+      }
+    })
+
+    mount(TheChat, {
+      global: {
+        plugins: [vuetify, createTestingPinia()]
+      }
+    })
+
     const store = useChatStore()
     expect(store.messages)
       .toHaveLength(0)

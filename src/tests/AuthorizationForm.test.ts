@@ -8,10 +8,26 @@ import {fireEvent, render, screen} from '@testing-library/vue';
 import {aliases, mdi} from 'vuetify/iconsets/mdi';
 
 describe('AuthorizationForm', () => {
-  const vuetify = createVuetify()
-
   it('mount correctly', () => {
+    const vuetify = createVuetify({
+      components,
+      directives,
+      icons: {
+        defaultSet: 'mdi',
+        aliases,
+        sets: {
+          mdi,
+        }
+      },
+      theme: {
+        defaultTheme: 'dark'
+      }
+    })
+
     const wrapper = mount(AuthorizationForm, {
+      props: {
+        formType: 'login'
+      },
       global: {
         plugins: [vuetify],
       }
@@ -22,7 +38,20 @@ describe('AuthorizationForm', () => {
   })
 
   it('define form button name from prop', async () => {
-    const vuetify = createVuetify()
+    const vuetify = createVuetify({
+      components,
+      directives,
+      icons: {
+        defaultSet: 'mdi',
+        aliases,
+        sets: {
+          mdi,
+        }
+      },
+      theme: {
+        defaultTheme: 'dark'
+      }
+    })
     const formTypeLogin = 'login'
     const formTypeAuth = 'register'
 
@@ -43,7 +72,7 @@ describe('AuthorizationForm', () => {
     expect(screen.getByText('Зарегистрироваться'))
       .toBeTruthy()
 
-    await wrapper.rerender({ formType: null })
+    await wrapper.rerender({ formType: '' })
 
     expect(screen.getByText('Тип формы не указан'))
       .toBeTruthy()
@@ -66,7 +95,7 @@ it('form with incorrect values return validation error messages', async () => {
     }
   })
 
-  const wrapper = render(AuthorizationForm, {
+  render(AuthorizationForm, {
     props: {
       formType: 'login',
     },
