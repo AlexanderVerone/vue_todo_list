@@ -1,9 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import AuthorizationPage from '@/pages/AuthorizationPage/components/AuthorizationPage.vue';
+import AuthorizationPage from '@/pages/AuthorizationPage.vue';
 import NotFoundPage
-  from '@/pages/NotFoundPage/components/NotFoundPage.vue';
+  from '@/pages/NotFoundPage.vue';
 import UserCabinetPage
-  from '@/pages/UserCabinet/components/UserCabinetPage.vue';
+  from '@/pages/UserCabinetPage.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),

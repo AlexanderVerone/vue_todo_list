@@ -6,7 +6,7 @@
 
 <script>
 import {defineComponent} from 'vue';
-import { UserCabinet } from '@/modules/UserCabinet/';
+import { UserCabinet } from '@/modules/UserCabinet';
 
 export default defineComponent({
   components: {UserCabinet}
