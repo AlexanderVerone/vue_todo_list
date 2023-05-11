@@ -4,11 +4,6 @@
   </div>
 </template>
 
-<script>
-import {defineComponent} from 'vue';
+<script setup lang="ts">
 import { UserCabinet } from '@/modules/UserCabinet';
-
-export default defineComponent({
-  components: {UserCabinet}
-})
 </script>

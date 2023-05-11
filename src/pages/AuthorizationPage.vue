@@ -4,13 +4,8 @@
   </v-container>
 </template>
 
-<script>
-import {defineComponent} from 'vue';
+<script setup lang="ts">
 import {Authorization} from '@/modules/Authorization';
-
-export default defineComponent({
-  components: {Authorization}
-})
 </script>
 
 <style scoped>
