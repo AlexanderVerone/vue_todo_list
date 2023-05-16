@@ -48,6 +48,7 @@ const initTodos = async () => {
     todos.value = cabinetStore.todos
   } catch (error: any) {
     const errorMessage = error.response.data.message
+
     if (cabinetToast.value) {
       cabinetToast.value.openSnackBar(errorMessage, 'error')
     }

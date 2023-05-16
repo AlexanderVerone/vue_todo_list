@@ -93,6 +93,7 @@ const initRegistration = async ({email, password}: FormData) => {
   try {
     isRequestFetching.value = true
     await authAPI.initUserRegistration({ email, password })
+
     if (toast.value) {
       toast.value.openSnackBar('Пользователь успешно создан', 'success')
     }
@@ -100,6 +101,7 @@ const initRegistration = async ({email, password}: FormData) => {
     tab.value = 'login'
   } catch (error: any) {
     const errorMessage = error.response.data.message
+
     if (toast.value) {
       toast.value.openSnackBar(errorMessage, 'error')
     }

@@ -150,11 +150,13 @@ const addTodo = async (newTodoData: NewTodo) => {
   try {
     await cabinetStore.addTodo(newTodoData)
     emit('update-todos')
+
     if (tableToast.value) {
       tableToast.value.openSnackBar('Задача добавлена', 'success')
     }
   } catch (error: any) {
     const errorMessage = error.response.data.message
+
     if (tableToast.value) {
       tableToast.value.openSnackBar(errorMessage, 'error')
     }
@@ -169,11 +171,13 @@ const deleteTodo = async (todoId: number) => {
   try {
     await cabinetStore.deleteTodo(todoId)
     emit('update-todos')
+
     if (tableToast.value) {
       tableToast.value.openSnackBar('Задача удалена', 'success')
     }
   } catch (error: any) {
     const errorMessage = error.response.data.message
+
     if (tableToast.value) {
       tableToast.value.openSnackBar(errorMessage, 'error')
     }
@@ -189,6 +193,7 @@ const toggleTaskIsDone = async (todoId: number) => {
     await cabinetStore.toggleTodoCompletion(todoId)
   } catch (error: any) {
     const errorMessage = error.response.data.message
+
     if (tableToast.value) {
       tableToast.value.openSnackBar(errorMessage, 'error')
     }

@@ -23,6 +23,7 @@ defineProps({
 const isActive = ref<boolean>(false)
 const message = ref<string>('')
 const messageType = ref<string>('')
+
 const openSnackBar = (toastMessage: string, type: string) => {
   message.value = toastMessage
   messageType.value = type
